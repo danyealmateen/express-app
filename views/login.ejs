@@ -4,19 +4,23 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="output.css" />
+    <link rel="stylesheet" href="login.css" />
     <title>Document</title>
   </head>
+  <div id="content-container">
   <body class="bg-gray-100">
     <div class="h-screen w-full flex items-center justify-center">
-      <div class=" p-10 rounded-2xl shadow-xl">
-        <h1>Please log in</h1>
+      <div class="p-10 rounded-2xl shadow-xl">
+        <h1 id="title">Please log in</h1>
         <form method="post" action="/login" class="login-form">
-          <input type="text" name="email" placeholder="email" />
-          <input type="password" name="password" placeholder="password" />
-          <button type="submit">Submit</button>
+          <input type="text" name="email" placeholder="email" id="inputForEmail" />
+          <br>
+          <input type="password" name="password" placeholder="password" id="inputForPassword" />
+          <br>
+          <button type="submit" id="submitBtn">Submit</button>
         </form>
       </div>
     </div>
+  </div>
   </body>
 </html>

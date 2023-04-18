@@ -1,3 +1,40 @@
 body {
-    background-color: brown;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(5, 75, 71);
+  font-family: "Verdana", sans-serif;
+  text-align: center;
+}
+
+#inputForEmail,
+#inputForPassword {
+  font-family: "Verdana", sans-serif;
+  font-size: 20px;
+  background-color: gray;
+  border: 3px solid rgb(255, 157, 0);
+  margin-top: 8px;
+  border-radius: 8px;
+}
+
+#submitBtn {
+  font-family: "Verdana", sans-serif;
+  font-size: 25px;
+  margin-top: 8px;
+  background-color: rgba(0, 255, 255, 0.388);
+  border-radius: 8px;
+  border: solid 3px rgb(255, 157, 0);
+}
+
+#title {
+  text-decoration: double underline;
+  text-decoration-color: rgb(255, 157, 0);
+}
+
+#content-container {
+  box-shadow: 10px 5px 35px 5px rgb(31, 30, 29);
+  padding: 50px;
+  border-radius: 8px;
+  margin-top: 50px;
 }
