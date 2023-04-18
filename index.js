@@ -11,6 +11,11 @@ let bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Set engine
+app.set("view engine", "ejs");
+
+app.set("views", "./views");
+
 app.use(
   session({ secret: "my-secret", resave: false, saveUninitialized: true })
 );
@@ -38,7 +43,12 @@ app.use(express.static("public"));
 
 //Default port 3000
 app.get("/", (req, res) => {
-  res.send("Hello World! TEST TEST");
+  const data = {
+    title: "Welcome",
+    style: "color: red;",
+  };
+  res.render("index", data);
+  // res.sendFile(__dirname + "/views/html/index.html");
 });
 
 //Protected
@@ -46,7 +56,13 @@ app.get("/", (req, res) => {
 //Logged-in
 app.get("/logged-in", (req, res) => {
   if (req.session.authenticated) {
-    res.sendFile(__dirname + "/views/logged-in.html");
+    const data = {
+      name: "Dany",
+      style: "color: green",
+    };
+
+    res.render("logged-in", data);
+    // res.sendFile(__dirname + "/views/html/logged-in.html");
   } else {
     res.redirect("/login");
   }
@@ -54,12 +70,12 @@ app.get("/logged-in", (req, res) => {
 
 //Skapar en route till INDEX.HTML
 app.get("/random", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
+  res.sendFile(__dirname + "/views/html/index.html");
 });
 
 //API
 app.get("/api/getuser", (req, res) => {
-  res.json('{"name": "Dany"}')
+  res.json('{"name": "Dany"}');
 });
 
 //Lyssnar
@@ -93,6 +109,8 @@ app.post("/login", (req, res) => {
 
 //GET (ROUTE TILL LOGIN.HTML)
 app.get("/login", (req, res) => {
-  console.log(req.body);
-  res.sendFile(__dirname + "/views/login.html");
+res.render('login')
+
 });
+
+
