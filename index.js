@@ -2,115 +2,65 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const session = require("express-session");
-var mysql = require("mysql");
+const connection = require("./db_connection");
+
+require("dotenv").config();
 
 app.use(express.static("public"));
 
-//För postman
 let bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//Set engine
+// Set EJS as the view engine
 app.set("view engine", "ejs");
 
+// Specify the location of the views folder
 app.set("views", "./views");
 
 app.use(
-  session({ secret: "my-secret", resave: false, saveUninitialized: true })
+  session({
+    secret: "my-secret",
+    resave: false,
+    saveUninitialized: true,
+  })
 );
 
-//Databas connection
-var connection = mysql.createConnection({
-  host: "localhost",
-  port: "3306",
-  user: "bobby",
-  password: "bobby",
-  database: "express_demo",
-});
+// Database connection
 
-connection.connect(function (err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
+//ROUTING
+const router = require("./routes/routes.js");
+app.use(router);
 
-  console.log("connected as id " + connection.threadId);
-});
+// Controllers
+const posts = require('./controllers/posts')
+app.use(posts);
 
-//Letar efter statiska filer i public mappen
-app.use(express.static("public"));
+//API Endpoints
+const api = require('./api/endpoints.js')
+app.use(api)
 
-//Default port 3000
-app.get("/", (req, res) => {
-  const data = {
-    title: "Welcome",
-    style: "color: red;",
-  };
-  res.render("index", data);
-  // res.sendFile(__dirname + "/views/html/index.html");
-});
 
-//Protected
 
-//Logged-in
-app.get("/logged-in", (req, res) => {
-  if (req.session.authenticated) {
-    const data = {
-      name: "Dany",
-      style: "color: green",
-    };
+app.get("/api/getfavoritecolor", (req, res) => {
+  if (req.session.authenticated && req.session.username) {
+    connection.query(
+      `SELECT * FROM users WHERE name='${req.session.username}'`,
+      function (error, results, fields) {
+        if (error) throw error;
 
-    res.render("logged-in", data);
-    // res.sendFile(__dirname + "/views/html/logged-in.html");
+        if (results.length > 0) {
+          res.json(`{"color": ${results[0].favorite_color}}`);
+        } else {
+          // res.send('Found no users')
+        }
+      }
+    );
   } else {
     res.redirect("/login");
   }
 });
 
-//Skapar en route till INDEX.HTML
-app.get("/random", (req, res) => {
-  res.sendFile(__dirname + "/views/html/index.html");
-});
-
-//API
-app.get("/api/getuser", (req, res) => {
-  res.json('{"name": "Dany"}');
-});
-
-//Lyssnar
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
-//Post
-app.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  // console.log(email);
-  // console.log(password);
-
-  connection.query(
-    `SELECT * FROM users WHERE email ='${email}' AND password='${password}'`,
-    function (error, results, fields) {
-      if (error) throw error;
-
-      if (results.length > 0) {
-        // res.send("Found " + results.length + "users");
-        req.session.authenticated = true;
-        res.redirect("/logged-in");
-      } else {
-        res.send("Found no users");
-      }
-      console.log(results);
-    }
-  );
-});
-
-//GET (ROUTE TILL LOGIN.HTML)
-app.get("/login", (req, res) => {
-res.render('login')
-
-});
-
-

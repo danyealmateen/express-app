@@ -1,0 +1,16 @@
+<%- include('./../partials/head.ejs', {title: "Login"}); %>
+
+<h1 class="font-bold">All Posts</h1>
+
+<ul>
+  <% posts.forEach(post => { %>
+  <li>
+    <h2 class="font-bold"><%= post.titel %></h2>
+    <h1 class="font-bold"><%= post.created_at %></h1>
+    <p><%= post.content %></p>
+    <p>Author: <%= post.author %></p>
+  </li>
+  <% }); %>
+</ul>
+
+<%-include('./../partials/footer'); %>

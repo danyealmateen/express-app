@@ -1,29 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="output.css" />
-    <title>Inloggad</title>
-  </head>
-  <body>
-    <h1>
-      GRATTIS <span style="<%= style %>"> <%= name %> </span> DU ÄR INLOGGAD
-    </h1>
+<%- include('partials/head', {title: 'Välkommen'} ); %>
 
-    <button onclick="getUserName()">Hämta namn</button>
+<h1>
+  Grattis!!! <span style="<%= style %>"> <%= name %> </span> du är inloggad!
+</h1>
 
-    <script>
-      function getUserName() {
-        fetch(`http://localhost:3000/api/getuser`)
-          .then((data) => {
-            return data.json();
-          })
-          .then((json) => {
-            console.log(json);
-          });
-      }
-    </script>
-  </body>
-</html>
+<div>
+  <p class="mt-10">
+    Lotenetur vitae facere error iusto molestiae accusamus magni delectus
+    aliquid quasi quisquam qui iure odit alias voluptatem esse? Qui, adipisci.
+  </p>
+</div>
+
+<button
+  class="mt-8 px-4 py-2 bg-blue-300 text-white"
+  onclick="getUserFavoriteColor()"
+>
+  Hämta favoritfärg
+</button>
+
+<a class="inline-block mt-8 px-4 py-2 bg-blue-300 text-white" href="/logout">Logout</a>
+
+<script>
+  function getUserFavoriteColor() {
+    fetch("http://localhost:3000/api/getfavoritecolor")
+      .then((data) => {
+        return data.json();
+      })
+      .then((json) => {
+        console.log(json);
+      });
+  }
+</script>
+
+<%- include('partials/footer'); %>
