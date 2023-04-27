@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../db_connection");
+const authMiddleware = require('./../middlewares/auth')
 
 router.get("/", (req, res) => {
   const data = {
@@ -10,8 +11,19 @@ router.get("/", (req, res) => {
   res.render("index", data);
 });
 
-router.get("/logged-in", (req, res) => {
-  if (req.session.authenticated && req.session.username) {
+
+router.get("/testauth", authMiddleware, (req, res) => {
+  if (req.isAuthenticated) {
+    res.send('logged in')
+  } else {
+    res.send('not logged in')
+  }
+})
+
+
+
+router.get("/logged-in", authMiddleware, (req, res) => {
+  if (req.isAuthenticated) {
 
     const username = req.session.username;
     const data = {
@@ -38,6 +50,7 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
+//////
 router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
